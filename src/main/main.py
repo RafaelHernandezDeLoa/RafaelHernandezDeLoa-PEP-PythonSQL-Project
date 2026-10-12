@@ -41,7 +41,7 @@ def main():
     write_ordered_calls(os.path.join(_RESOURCES_DIR, 'orderedCalls.csv'))
 
     # Helper method that prints the contents of the users and callLogs tables. Uncomment to see data.
-    # select_from_users_and_call_logs()
+    select_from_users_and_call_logs()
 
     # Close the cursor and connection. main function ends here.
     cursor.close()
@@ -53,14 +53,53 @@ def main():
 
 # This function will load the users.csv file into the users table, discarding any records with incomplete data
 def load_and_clean_users(file_path):
+    count = 1
 
-    print("TODO: load_users")
+    with open(file_path, "r") as file:
+        for line in file:
+            if count == 1:
+                count -= 1
+                continue
+
+            with_spaces = line.split(",")
+            name = []
+
+            for elements in with_spaces:
+                name.append(elements.strip())
+                if elements.strip() == "":
+                    name.pop(len(name)-1)
+            
+            if len(name) == 2:
+                cursor.execute("""
+                    INSERT INTO users(firstName, lastName) VALUES (?, ?)
+                """, (name[0], name[1]))
+
+    #print("TODO: load_users")
 
 
 # This function will load the callLogs.csv file into the callLogs table, discarding any records with incomplete data
 def load_and_clean_call_logs(file_path):
+    count = 1
 
-    print("TODO: load_call_logs")
+    with open(file_path, "r") as file:
+        for line in file:
+            if count == 1:
+                count -= 1
+                continue
+
+            with_spaces = line.split(",")
+            log = []
+
+            for elems in with_spaces:
+                if elems.strip() != "":
+                    log.append(elems.strip())
+            
+            if len(log) == 5:
+                cursor.execute("""
+                    INSERT INTO callLogs(phoneNumber, startTime, endTime, direction, userId) VALUES (?, ?, ?, ?, ?)
+                """, (log[0], log[1], log[2], log[3], log[4]))
+
+    #print("TODO: load_call_logs")
 
 
 # This function will write analytics data to testUserAnalytics.csv - average call time, and number of calls per user.
