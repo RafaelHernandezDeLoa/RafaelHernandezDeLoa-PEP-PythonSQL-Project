@@ -106,8 +106,32 @@ def load_and_clean_call_logs(file_path):
 # You must save records consisting of each userId, avgDuration, and numCalls
 # example: 1,105.0,4 - where 1 is the userId, 105.0 is the avgDuration, and 4 is the numCalls.
 def write_user_analytics(csv_file_path):
+    cursor.execute("""
+        SELECT * FROM callLogs
+    """)
 
-    print("TODO: write_user_analytics")
+    logs = cursor.fetchall()
+
+    duration = {}
+    call_nums = {}
+
+    for log in logs:
+        if call_nums.has_key(log[5]) and duration.has_key(log[5]):
+            call_nums[log[5]] = call_nums.get(log[5]) + 1
+            duration[log[5]] += log[3] - log[2]
+        else:
+            call_nums.update(log[5], 1)
+            duration.update(log[5], log[3] - log[2])
+    
+    for key in duration:
+        duration[key] = duration.get(key) / call_nums[key]
+    
+    with open(csv_file_path, "a") as file:
+        for key in duration:
+            file.write(key + "," + duration[key] + "," + call_nums[key] + "\n")
+        
+    
+    #print("TODO: write_user_analytics")
 
 
 # This function will write the callLogs ordered by userId, then start time.

@@ -1,0 +1,7 @@
+commit 73d0176081a200ffca463c39f80313ce2990bcb6
+Author: RafaelHernandezDeLoa <RafaelHernandezDeLoa@github.com>
+Date:   Mon Oct 12 16:24:57 2026 +0000
+
+    Did first two load_and_clean functions
+
+ 15 files changed, 46 insertions(+), 4 deletions(-)
