@@ -123,9 +123,9 @@ def write_user_analytics(csv_file_path):
         duration[key] = duration.get(key) / call_nums[key]
     
     with open(csv_file_path, "r+") as file:
-        file.seek(28, 0)
+        file.seek(27, 0)
         for key in duration:
-            file.write(str(key) + "," + str(duration[key]) + "," + str(call_nums[key]) + "\n")
+            file.write("\n" + str(key) + "," + str(duration[key]) + "," + str(call_nums[key]))
 
 
 # This function will write the callLogs ordered by userId, then start time.
