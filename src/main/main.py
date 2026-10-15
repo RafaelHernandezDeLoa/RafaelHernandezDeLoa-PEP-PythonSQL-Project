@@ -41,7 +41,7 @@ def main():
     write_ordered_calls(os.path.join(_RESOURCES_DIR, 'orderedCalls.csv'))
 
     # Helper method that prints the contents of the users and callLogs tables. Uncomment to see data.
-    select_from_users_and_call_logs()
+    # select_from_users_and_call_logs()
 
     # Close the cursor and connection. main function ends here.
     cursor.close()
@@ -74,8 +74,6 @@ def load_and_clean_users(file_path):
                     INSERT INTO users(firstName, lastName) VALUES (?, ?)
                 """, (name[0], name[1]))
 
-    #print("TODO: load_users")
-
 
 # This function will load the callLogs.csv file into the callLogs table, discarding any records with incomplete data
 def load_and_clean_call_logs(file_path):
@@ -99,8 +97,6 @@ def load_and_clean_call_logs(file_path):
                     INSERT INTO callLogs(phoneNumber, startTime, endTime, direction, userId) VALUES (?, ?, ?, ?, ?)
                 """, (log[0], log[1], log[2], log[3], log[4]))
 
-    #print("TODO: load_call_logs")
-
 
 # This function will write analytics data to testUserAnalytics.csv - average call time, and number of calls per user.
 # You must save records consisting of each userId, avgDuration, and numCalls
@@ -116,29 +112,33 @@ def write_user_analytics(csv_file_path):
     call_nums = {}
 
     for log in logs:
-        if call_nums.has_key(log[5]) and duration.has_key(log[5]):
+        if log[5] in call_nums and log[5] in duration:
             call_nums[log[5]] = call_nums.get(log[5]) + 1
             duration[log[5]] += log[3] - log[2]
         else:
-            call_nums.update(log[5], 1)
-            duration.update(log[5], log[3] - log[2])
+            call_nums[log[5]] = 1
+            duration[log[5]] = log[3] - log[2]
     
     for key in duration:
         duration[key] = duration.get(key) / call_nums[key]
     
     with open(csv_file_path, "a") as file:
         for key in duration:
-            file.write(key + "," + duration[key] + "," + call_nums[key] + "\n")
-        
-    
-    #print("TODO: write_user_analytics")
+            file.write(str(key) + "," + str(duration[key]) + "," + str(call_nums[key]) + "\n")
 
 
 # This function will write the callLogs ordered by userId, then start time.
 # Then, write the ordered callLogs to orderedCalls.csv
 def write_ordered_calls(csv_file_path):
+    cursor.execute("""
+        SELECT * FROM callLogs ORDER BY userId, startTime
+    """)
 
-    print("TODO: write_ordered_calls")
+    logs = cursor.fetchall()
+
+    with open(csv_file_path, "a") as file:
+        for elem in logs:
+            file.write(str(elem[0]) + "," + str(elem[1]) + "," + str(elem[2]) + "," + str(elem[3]) + "," + elem[4] + "," + elem[5] + "\n")
 
 
 
