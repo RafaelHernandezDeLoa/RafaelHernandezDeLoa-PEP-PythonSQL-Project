@@ -145,9 +145,10 @@ def write_ordered_calls(csv_file_path):
 
     logs = cursor.fetchall()
 
-    with open(csv_file_path, "a") as file:
+    with open(csv_file_path, "r+") as file:
+        file.seek(53,0)
         for elem in logs:
-            file.write(str(elem[0]) + "," + str(elem[1]) + "," + str(elem[2]) + "," + str(elem[3]) + "," + elem[4] + "," + str(elem[5]) + "\n")
+            file.write("\n" + str(elem[0]) + "," + str(elem[1]) + "," + str(elem[2]) + "," + str(elem[3]) + "," + elem[4] + "," + str(elem[5]))
 
 
 
