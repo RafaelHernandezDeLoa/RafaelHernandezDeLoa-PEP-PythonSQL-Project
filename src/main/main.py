@@ -122,7 +122,8 @@ def write_user_analytics(csv_file_path):
     for key in duration:
         duration[key] = duration.get(key) / call_nums[key]
     
-    with open(csv_file_path, "a") as file:
+    with open(csv_file_path, "r+") as file:
+        file.seek(28, 0)
         for key in duration:
             file.write(str(key) + "," + str(duration[key]) + "," + str(call_nums[key]) + "\n")
 
@@ -138,7 +139,7 @@ def write_ordered_calls(csv_file_path):
 
     with open(csv_file_path, "a") as file:
         for elem in logs:
-            file.write(str(elem[0]) + "," + str(elem[1]) + "," + str(elem[2]) + "," + str(elem[3]) + "," + elem[4] + "," + elem[5] + "\n")
+            file.write(str(elem[0]) + "," + str(elem[1]) + "," + str(elem[2]) + "," + str(elem[3]) + "," + elem[4] + "," + str(elem[5]) + "\n")
 
 
 
