@@ -56,7 +56,7 @@ def load_and_clean_users(file_path):
     count = 1
 
     cursor.execute("""
-        DELETE * FROM users
+        DELETE FROM users
     """)
 
     with open(file_path, "r") as file:
@@ -84,7 +84,7 @@ def load_and_clean_call_logs(file_path):
     count = 1
 
     cursor.execute("""
-        DELETE * FROM callLogs
+        DELETE FROM callLogs
     """)
 
     with open(file_path, "r") as file:
